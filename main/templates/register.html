@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+     <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Sign Up</title>
+     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+     <link rel="stylesheet" href="draw.css">
+       
+</head>
+
+<body>
+    <div id="container">
+        <div id="login-email">
+                <h3 id="login-text" >Register</h3>
+                <input type="text" placeholder="Fullname" id="nameInp" class="form-control mb-3">
+                <input type="text" placeholder="Email" id="emailInp" class="form-control mb-3">
+                <input type="text" placeholder="Username" id="userInp" class="form-control mb-3">
+                <input type="password" placeholder="Password" id="passInp" class="form-control mb-3">
+                <div id="input-group">
+                <button type="text" id="sub_btn" class="btn">Register</button>
+            </div>
+                <a href="login.html" id="login-register-text">Already Have An Account?</a><br>
+               <center> <a href="#" onclick="forgoPass()">Forgot Password</a></center>
+        <div id="social">
+            <img src="fb.png">
+            <img src="gp.png">
+            <img src="tw.png">
+            </div>
+
+    </div>
+</div>
+
+    <script type="module">
+//-----------------------FIREBASE CONFIG-------------------------------------------------------------------------------------------------------//
+          // Import the functions you need from the SDKs you need
+  		import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-app.js";
+  		// TODO: Add SDKs for Firebase products that you want to use
+  		// https://firebase.google.com/docs/web/setup#available-libraries
+
+  		// Your web app's Firebase configuration
+  		const firebaseConfig = {
+    		apiKey: "AIzaSyDNtoHhkCC1VPadFRyweMNJvdaWdkgQ7uI",
+    		authDomain: "ai-project-b88db.firebaseapp.com",
+    		databaseURL: "https://ai-project-b88db-default-rtdb.firebaseio.com",
+    		projectId: "ai-project-b88db",
+    		storageBucket: "ai-project-b88db.appspot.com",
+    		messagingSenderId: "541832168239",
+    		appId: "1:541832168239:web:a87f13f2fc1140cca197da"
+  		};
+
+  		// Initialize Firebase
+  		const app = initializeApp(firebaseConfig);
+        
+          import { getDatabase, ref, set, child, get }
+             from "https://www.gstatic.com/firebasejs/9.6.6/firebase-database.js";
+        
+          const db = getDatabase();
+
+//------------------------------THE REFRENECES-------------------------------------------------------------------------------------------------//
+
+          const name = document.getElementById('nameInp');
+          const email = document.getElementById('emailInp');
+          const username = document.getElementById('userInp');
+          const pass = document.getElementById('passInp');
+          const submit = document.getElementById('sub_btn');
+
+//---------------------------------VALIDATION--------------------------------------------------------------------------------------------------//
+
+          function isEmptyOrSpaces(str){
+              return str === null || str.match(/^ *$/) !== null;
+          }
+          
+          function Validation(){
+            let nameregex = /^[a-zA-Z\s]+$/;
+            let emailregex = /^[a-zA-Z0-9]+@(gmail|yahoo|outlook)\.com$/;
+            let userregex = /^[a-zA-Z0-9]{5,}$/;
+
+            if(isEmptyOrSpaces(name.value) || isEmptyOrSpaces(email.value) || isEmptyOrSpaces(username.value) ||
+                isEmptyOrSpaces(pass.value)){
+                    alert("you cannot left any field empty");
+                    return false;
+                }
+
+            if(!nameregex.test(name.value)){
+                  alert("the name should only contain alphabets!");
+                  return false;
+            }
+
+            if(!emailregex.test(email.value)){
+                  alert("enter a valid email");
+                  return false;
+            }
+
+            if(!userregex.test(username.value)){
+                  alert("-username can only be alphanumeric\n-username must be aleast 5 characters\n-username cannot contain spaces");
+                  return false;
+            }
+
+            return true;
+        }
+
+//---------------------------------REGISTER USER TO FIREBASE-----------------------------------------------------------------------------------//
+
+     function RegisterUser(){
+        if(!Validation()){
+             return;
+        };
+         const dbRef = ref(db);
+
+         get(child(dbRef, "UsersList/"+ username.value)).then((snapshot)=>{
+             if(snapshot.exists()){
+                 alert("Account Already Exist!");
+            }
+
+            else{
+                 set(ref(db, "UsersList/"+ username.value),
+                {
+                    fullname: name.value,
+                    email: email.value,
+                    username: username.value,
+                    password: encPass()
+                })
+                .then(()=>{
+                    alert("user added successfully");
+                })
+                .catch((error)=>{
+                    alert("error"+ error);
+                })
+            }
+        });   
+    }
+
+    function forgoPass(){
+        const email = document.getElementById('emailInp');
+        import { getAuth, sendPasswordResetEmail } from "firebase/auth";
+ 
+        const auth = getAuth();
+        sendPasswordResetEmail(auth, email)
+          .then(() => {
+            // Password reset email sent!
+            // ..
+            alert("Reset link sent to your email id");
+          })
+          .catch((error) => {
+            alert("error"+ error);
+            //const errorCode = error.code;
+            //const errorMessage = error.message;
+            // ..
+  });
+    }
+
+//---------------------------------ENCRIPTION-------------------------------------------------------------------------------------------------//
+   
+    function encPass(){
+        var pass12 = CryptoJS.AES.encrypt(pass.value, pass.value);
+        return pass12.toString();
+    } 
+
+//---------------------------------ASSIGN THE EVENTS------------------------------------------------------------------------------------------//
+
+    submit.addEventListener('click', RegisterUser);
+
+</script>
+</body>
+</html>

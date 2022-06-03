@@ -1,0 +1,26 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>User Information Form</title>
+    </head>
+        <body>
+
+            
+
+            <form action="" method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="Submit" name="submit" value="Submit"/>
+            </form>
+            
+            {% if submitbutton == "Submit" %} 
+            <h1> Your first name is {{ firstname }}</h1>
+            <h1> Your last name is {{ links }}</h1>
+
+            <h1>LiVe ViDeO StReAmInG</h1>
+            <img src="{% url 'mask_feed' %}" class="center">
+            
+            {% endif %}
+        
+        </body>
+</html>

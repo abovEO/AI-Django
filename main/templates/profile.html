@@ -1,0 +1,425 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Your profile - Edge Impulse</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- generics -->
+    <link rel="icon" href="/themes/default/favicon-color/favicon-32.png" sizes="32x32">
+    <link rel="icon" href="/themes/default/favicon-color/favicon-57.png" sizes="57x57">
+    <link rel="icon" href="/themes/default/favicon-color/favicon-76.png" sizes="76x76">
+    <link rel="icon" href="/themes/default/favicon-color/favicon-96.png" sizes="96x96">
+    <link rel="icon" href="/themes/default/favicon-color/favicon-128.png" sizes="128x128">
+    <link rel="icon" href="/themes/default/favicon-color/favicon-228.png" sizes="228x228">
+    <!-- iOS -->
+    <link rel="apple-touch-icon" href="/themes/default/favicon-color/favicon-120.png" sizes="120x120">
+    <link rel="apple-touch-icon" href="/themes/default/favicon-color/favicon-152.png" sizes="152x152">
+    <link rel="apple-touch-icon" href="/themes/default/favicon-color/favicon-180.png" sizes="180x180">
+    <!-- Windows -->
+    <meta name="msapplication-TileColor" content="#FFFFFF">
+    <meta name="msapplication-TileImage" content="/themes/default/favicon-color/favicon-144.png">    <script nonce="uY/f19hLP2PsXqkQ5vFjwA&#x3D;&#x3D;">
+    
+        function getCookie(cname) {
+            let name = cname + "=";
+            let decodedCookie = decodeURIComponent(document.cookie);
+            let ca = decodedCookie.split(';');
+            for (let c of ca) {
+                while (c.charAt(0) === ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) === 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return undefined;
+        }
+    
+        function pushUserInfoToGA() {
+            try {
+                const cookieText = getCookie('userinfo');
+                const userInfoCookie = cookieText ? JSON.parse(cookieText) : undefined;
+                window.dataLayer = window.dataLayer || [];
+                window.dataLayer.push({
+                  "event": "page_data",
+                  "user": {
+                    "logged_in": userInfoCookie !== undefined,
+                    "user_id":  userInfoCookie ? userInfoCookie.user_id : undefined,
+                    "experience_level": userInfoCookie ? userInfoCookie.experience : undefined,
+                    "ei": userInfoCookie ? userInfoCookie.ei : undefined,
+                    "enterprise": userInfoCookie ? userInfoCookie.enterprise : undefined
+                  }
+                });
+            } catch (e) {
+                console.log("Exception pushing to GA: ", e);
+            }
+        }
+    
+        pushUserInfoToGA();
+    
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://stream.edgeimpulse.com/gtm.js?id='+i+dl;f.parentNode.insertBefore (j,f);
+        })(window,document,'script','dataLayer','GTM-PLFFMH6');
+    </script>
+    <link href="https://studio.edgeimpulse.com/assets/01dd5800cdb9d10dc48083bdd7a3843fb070290d/argon-assets/js/plugins/nucleo/css/nucleo.css" rel="stylesheet">
+    <link href="https://studio.edgeimpulse.com/assets/01dd5800cdb9d10dc48083bdd7a3843fb070290d/fontawesome-pro-5.15.1-web/css/all.min.css" rel="stylesheet">
+    <link href="https://studio.edgeimpulse.com/assets/01dd5800cdb9d10dc48083bdd7a3843fb070290d/argon-assets/css/argon-dashboard.css" rel="stylesheet">
+    <link href="https://studio.edgeimpulse.com/assets/01dd5800cdb9d10dc48083bdd7a3843fb070290d/components.css" rel="stylesheet" >
+    <link href="https://studio.edgeimpulse.com/assets/01dd5800cdb9d10dc48083bdd7a3843fb070290d/style.css" rel="stylesheet">
+    <script src="https://js.sentry-cdn.com/62df1ed3109c417ba08de1a313c507dd.min.js" crossorigin="anonymous"></script>
+    <style type="text/css">
+        /*
+         * Theme global overrides.
+         */
+        :root {
+            --projects-primary: #5e72e4 !important;
+            --projects-primary-red: 94;
+            --projects-primary-green: 114;
+            --projects-primary-blue: 228;
+            --organizations-primary: #f6572c !important;
+            --organizations-primary-red: 246;
+            --organizations-primary-green: 87;
+            --organizations-primary-blue: 44;
+            /* the threshold at which colors are considered "light".
+               Range: decimals from 0 to 1, recommended 0.5 - 0.6 */
+            --threshold: 0.5;
+            /* the threshold at which a darker border will be applied.
+               Range: decimals from 0 to 1, recommended 0.8+ */
+            --border-threshold: 0.8;
+        }
+    </style>
+    
+    <style type="text/css">
+    .theme-section {
+        min-width: 300px;
+    }
+    
+    .theme-image-container {
+        border: solid 1px lightgrey;
+    }
+    
+    .theme-image-container.theme-favicon-container {
+        max-width: 50px;
+    }
+    
+    .theme-image-container.theme-logo-container {
+        max-width: 300px;
+        max-height: 100px;
+    }
+    
+    .theme-image {
+        background-size: content;
+        margin: 10px;
+    }
+    
+    .theme-image.theme-favicon {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .theme-image.theme-logo {
+        max-width: 250px;
+        max-height: 64px;
+    }
+    
+    .theme-color-preview {
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        display: inline-block;
+    }
+    </style>
+    
+</head>
+
+<body class="bg-white">
+    <div class="main-content">
+        <!-- Navbar -->
+        <nav class="navbar navbar-top navbar-horizontal navbar-expand-md bg-white" id="form-page-main">
+            <div class="container px-4">
+                <a class="navbar-brand pt-0 text-lg text-white logo-text" href="/">
+                    <img src="/themes/default/svg/logo-rgb.svg">
+                </a>
+                <ul class="navbar-nav align-items-center d-md-flex user-widget" >
+                    <li class="nav-item dropdown">
+                        <a class="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                            <div class="media align-items-center">
+                                <span class="avatar avatar-sm rounded-circle">
+                                    <img alt="Anjani" src="https://studio.edgeimpulse.com/assets/01dd5800cdb9d10dc48083bdd7a3843fb070290d/images/placeholder.png">
+                                </span>
+                                <div class="media-body ml-2 d-lg-block pl-1">
+                                    <span id="user-widget" class="mb-0 text-sm  font-weight-bold  user-widget-name ">Anjani</span>
+                                </div>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-right dropdown-menu-user">
+                                    <div class=" dropdown-header noti-title">
+                                        <h6 class="text-overflow m-0">Welcome!</h6>
+                                    </div>
+                                    <a href="profile.html" class="dropdown-item">
+                                        <i class="ni ni-single-02"></i>
+                                        <span class="pr-2">Your profile</span>
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a href="/studio/select-project#create-new-project" class="dropdown-item">
+                                        <i class="fas fa-plus" style="width: 15px"></i>
+                                        <span class="pr-2">Create new project</span>
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <div class=" dropdown-header noti-title">
+                                        <h6 class="text-overflow m-0">Projects</h6>
+                                    </div>
+                                    <a href="/studio/76822" class="dropdown-item">
+                                        <i class="fas fa-project-diagram text-sm "></i>
+                                        <span class="pr-2">Anjanimehta</span>
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a href="#!" class="dropdown-item logout-btn">
+                                        <i class="ni ni-user-run"></i>
+                                        <span>Logout</span>
+                                    </a>
+                                </div>    </li>
+                </ul>            </div>
+        </nav>
+<!-- Header -->
+<div class="header bg-ee-gradient-primary position-relative form-header">
+    <span class="mask pattern-mask"></span>
+
+    <div class="container">
+
+        <div class="header-body text-center mb-8 mt-4">
+            <div class="row justify-content-center">
+                <div class="col">
+                    <h2 class="text-white display-3">Your profile</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="separator separator-bottom separator-skew zindex-100">
+        <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1"
+            xmlns="http://www.w3.org/2000/svg">
+            <polygon class="fill-white" points="2560 0 2560 100 0 100"></polygon>
+        </svg>
+    </div>
+</div>
+<!-- Page content -->
+<div class="container pb-5 form-container profile-page">
+    <div class="row justify-content-center">
+        <div class="col-lg-7 col-md-9">
+            <div class="card bg-gradient-secondary shadow">
+                <div class="row justify-content-center mb-8 photo-row">
+                    <div class="col-lg-3 order-lg-2">
+                        <div class="card-profile-image">
+                            <a href="#" title="Upload new photo" data-toggle="modal" data-target="#upload-photo-modal">
+                                <img src="https://studio.edgeimpulse.com/assets/01dd5800cdb9d10dc48083bdd7a3843fb070290d/images/placeholder.png" class="rounded-circle">
+                                <div class="upload-icon">
+                                    <i class="fas fa-upload"></i>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body px-5 py-5">
+                    <form role="form" action="" method="POST">
+                        <div class="text-center text-muted mb-4">
+                            Update your profile
+                        </div>
+                        <div class="row">
+                            <div class="form-group col">
+                                <label class="form-control-label" for="input-name">What should we call you?</label>
+                                <input type="text" id="input-name" name="name"
+                                    class="form-control" placeholder="Your name" value="Anjani">
+                                <div class="invalid-feedback" data-for="input-name">
+                                    Minimum 2 characters.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col">
+                                <label class="form-control-label" for="input-email">Your e-mail address (can only be updated via support)</label>
+                                <input type="text" id="input-email"
+                                    class="form-control" placeholder="E-mail address" value="anjanimehta98@gmail.com" disabled>
+                            </div>
+                        </div>
+                        <div class="row text-center">
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-orange mt-4">Update profile</a>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="row border-top mt-6 mb-6"></div>
+
+                    <form role="form" action="" method="POST">
+                        <div class="text-center text-muted mb-4">
+                            Change your password
+                        </div>
+                        <div class="row">
+                            <div class="form-group col">
+                                <label class="form-control-label">Current password</label>
+                                <input type="password" name="old-password"
+                                    class="form-control" placeholder="Current password">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col">
+                                <label class="form-control-label">New password</label>
+                                <input type="password" name="new-password" autocomplete="new-password"
+                                    class="form-control" placeholder="New password">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col">
+                                <label class="form-control-label">Repeat your new password</label>
+                                <input type="password" name="new-password2" autocomplete="new-password"
+                                    class="form-control" placeholder="Repeat your new password">
+                            </div>
+                        </div>
+                        <div class="row text-center">
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-orange mt-4">Change password</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="upload-photo-modal" tabindex="-1" role="dialog" aria-labelledby="upload-photo-label"
+aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="upload-photo-label">
+                    <i class="fas fa-bolt"></i>
+                    <span class="pl-2">Upload a new photo</span>
+                </h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body border-bottom text-center">
+                <div class="empty" id="upload-photo-area">
+                    <a href="#" class="text-gray">
+                        <div class="row pt-4">
+                            <div class="col text-center">
+                                <div class="icon icon-shape bg-white text-gray rounded-circle shadow">
+                                    <i class="fas fa-upload"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col text-center mt-4">Click here to upload a new photo</div>
+                        </div>
+                    </a>
+                </div>
+                <div id="crop-photo-area" class="pb-5" style="display: none">
+                    <img>
+                </div>
+            </div>
+            <div class="row px-4 py-4">
+                <div class="col-6 text-left d-flex">
+                    <div class="justify-content-center align-self-center">
+                        <a href="#" id="upload-go-back" class="text-gray text-sm">Go back</a>
+                    </div>
+                </div>
+                <div class="col-6 text-right">
+                    <button type="button" class="btn btn-primary disabled" id="upload-btn" disabled>Upload</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link href="https://studio.edgeimpulse.com/assets/01dd5800cdb9d10dc48083bdd7a3843fb070290d/croppie/croppie.css" rel="stylesheet">
+
+<footer class="pb-5 pt-3 form-page-footer">
+        <div class="container">
+            <div class="row align-items-center justify-content-xl-between">
+                <div class="col">
+                    <div class="copyright text-center text-xl-left text-muted">
+                        &copy; 2022 <a href="https://www.edgeimpulse.com" class="font-weight-bold ml-1"
+                            target="_blank">EdgeImpulse Inc.</a> All rights reserved
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    
+    </div>
+    
+    <div class="modal fade" id="clone-login-modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">
+                        <i class="fas fa-rocket"></i>
+                        <span class="pl-2">Almost there!</span>
+                    </h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body pt-0">
+                    <div class="row">
+                        <div class="col-3 border-right">
+                            <div class="row align-items-center h-100">
+                                <div class="col">
+                                    <img src="/themes/default/svg/mark.svg"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col pl-4 py-4">
+                            <div class="row">
+                                <div class="col text-sm">
+                                    You'll need a <u>free</u> Edge Impulse
+                                        account to clone this project.
+                                    Creating an account lets you add your own data,
+                                        modify models, and join a community of thousands of
+                                        embedded machine learning developers!
+                                </div>
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col">
+                                    <a id="clone-login-signup" href="#" class="btn btn-outline-success">
+                                        <i class="far fa-user-plus mr-2"></i> Sign up for free
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col text-xs">
+                                    <a id="clone-login-login" href="#" class="text-gray">
+                                        <i class="far fa-sign-in-alt mr-1"></i> I already have an account
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    <script src="https://studio.edgeimpulse.com/assets/01dd5800cdb9d10dc48083bdd7a3843fb070290d/socket.io/socket.io.js"></script>
+    
+    
+    <script src="https://studio.edgeimpulse.com/assets/01dd5800cdb9d10dc48083bdd7a3843fb070290d/client/bundle.min.js"></script>
+    
+    
+    <noscript><iframe src="https://stream.edgeimpulse.com/gtm.js?id=GTM-PLFFMH6" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <script nonce="uY/f19hLP2PsXqkQ5vFjwA&#x3D;&#x3D;">
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    
+    require('client/init').default("%7B%22pageType%22%3A16%2C%22gaId%22%3A%22UA-147980949-5%22%2C%22userId%22%3A45510%2C%22staticAssetsPrefix%22%3A%22https%3A%2F%2Fstudio.edgeimpulse.com%2Fassets%2F01dd5800cdb9d10dc48083bdd7a3843fb070290d%22%2C%22user%22%3A%7B%22id%22%3A45510%2C%22name%22%3A%22Anjani%22%2C%22photo%22%3A%22%22%7D%7D");
+    </script>
+    </body>
+    
+    </html>
