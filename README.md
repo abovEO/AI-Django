@@ -1,1 +1,1 @@
-The Auto AI project is built with the purpose of assisting technical and non technical personnel with any and all AI/ML use cases without an in depth know how of the code environment as well as technical requirements. //
+The Auto AI project is built with the purpose of assisting technical and non technical personnel with any and all AI/ML use cases without an in depth know how of the code environment as well as technical requirements. ///
