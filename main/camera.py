@@ -14,7 +14,6 @@ from django.conf import settings
 from .models import Userinfo
 
 
-
 face_detection_videocam = cv2.CascadeClassifier(os.path.join(
     settings.BASE_DIR, 'opencv_haarcascade_data/haarcascade_frontalface_default.xml'))
 face_detection_webcam = cv2.CascadeClassifier(os.path.join(
@@ -38,8 +37,6 @@ class MaskDetect(object):
         linkk = self.realdata
 
         self.vs = VideoStream(linkk).start()
-        
-   
 
     def __del__(self):
         cv2.destroyAllWindows()
@@ -134,4 +131,23 @@ class MaskDetect(object):
                         cv2.FONT_HERSHEY_SIMPLEX, 0.45, color, 2)
             cv2.rectangle(frame, (startX, startY), (endX, endY), color, 2)
         ret, jpeg = cv2.imencode('.jpg', frame)
+        return jpeg.tobytes()
+
+
+class VideoCamera(object):
+    def __init__(self):
+        self.feched_link = Userinfo.objects.values_list('link').first()
+        self.realdata = str(self.feched_link)[2:-3]
+        print(self.realdata)
+        linkk = self.realdata
+        self.vs = VideoStream(linkk).start()
+
+    def __del__(self):
+        cv2.destroyAllWindows()
+
+    def get_frame(self):
+        imgNp = self.vs.read()
+        resize = cv2.resize(imgNp, (640, 480),
+                                interpolation=cv2.INTER_LINEAR)
+        ret, jpeg = cv2.imencode('.jpg', resize)
         return jpeg.tobytes()

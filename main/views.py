@@ -1,12 +1,11 @@
 from fileinput import filename
 from django.shortcuts import render
 from django.http.response import StreamingHttpResponse
-from main.camera import MaskDetect
-
+from main.camera import MaskDetect, VideoCamera
 from django.shortcuts import render
 from .forms import UserForm, CaptureIn
 import cv2
-from .models import Userinfo
+from .models import Userinfo, captureDatasets
 import os
 from cv2 import VideoCapture
 from PIL import Image
@@ -14,7 +13,7 @@ from PIL import Image
 
 def pageInput(request):
     submitbutton = request.POST.get("submit")
-
+    
     firstname = ''
     links = ''
     # emailvalue=''
@@ -32,6 +31,8 @@ def pageInput(request):
 
     return render(request, 'pageInput.html', context)
 
+
+
 # datasets input
 
 
@@ -40,15 +41,21 @@ def datasetin(request):
 
     folder = ''
     img = ''
+    links = ''
     # emailvalue=''
 
     form = CaptureIn(request.POST or None)
     if form.is_valid():
         folder = form.cleaned_data.get("folder_name")
         img = form.cleaned_data.get("img_count")
-        # emailvalue= form.cleaned_data.get("email")
+        links = form.cleaned_data.get("capturelinks")
+
         directory = folder
         imagecount = img
+        linkss = Userinfo(link=links)
+        linkss.save()
+        reg = captureDatasets(id=1, folder_name=folder, images_count=img)
+        reg.save()
         feched_link = Userinfo.objects.values_list('link').first()
         realdata = str(feched_link)[2:-3]
         print(realdata)
@@ -63,6 +70,7 @@ def datasetin(request):
         
         filename = len(os.listdir(directory))
         count = 0
+        
         while True and count < imagecount:
             filename += 1
             count += 1
@@ -71,20 +79,16 @@ def datasetin(request):
             im = im.resize((224, 224))
             im.save(os.path.join('dataset/'+directory, str(filename) + ".jpg"), "JPEG")
 
-            cv2.imshow("Capturing", frame)
-            key = cv2.waitKey(1)
-            if key == ord('q'):
-                break
-        vs.release()
-        cv2.destroyAllWindows()
+           
         
       
 
 
-    context = {'form': form, 'folder_name': folder, 'img_count': img,
+    context = {'form': form, 'folder_name': folder, 'img_count': img, 'capturelinks': links,
                'submitbutton': submitbutton}
 
     return render(request, 'capturein.html', context)
+
 
 
 def gen(camera):
@@ -97,6 +101,10 @@ def gen(camera):
 def mask_feed(request):
     return StreamingHttpResponse(gen(MaskDetect()),
                                  content_type='multipart/x-mixed-replace; boundary=frame')
+def video_feed(request):
+	return StreamingHttpResponse(gen(VideoCamera()),
+					content_type='multipart/x-mixed-replace; boundary=frame')
+
 
 
 def index(request):

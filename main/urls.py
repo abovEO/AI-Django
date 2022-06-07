@@ -14,9 +14,12 @@ urlpatterns = [
     path("cameramanagement/",views.cameramanagement, name='cameramanagement'),
 
     path('mask_feed', views.mask_feed, name='mask_feed'),
+    path('video_feed', views.video_feed, name='video_feed'),
 
     path('pageInput/', views.pageInput, name="pageInput"),
-    path('captureinput/', views.datasetin, name="capturedata")
+   
+    path('captureinput/', views.datasetin, name="capturedata"),
+    
 
     
 ]

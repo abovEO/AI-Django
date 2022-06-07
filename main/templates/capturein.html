@@ -5,7 +5,10 @@
     </head>
         <body>
 
+
             
+            <img src="{% url 'video_feed' %}" class="center">
+           
 
             <form action="" method="POST">
             {% csrf_token %}
@@ -14,8 +17,11 @@
             </form>
             
             {% if submitbutton == "Submit" %} 
+            
             <h1> Your folder name is {{ folder_name }}</h1>
-            <h1> Your img count is {{ img_count }}</h1>
+            <h1> Your img count is {{ img_count }}</h1> 
+            <h1> Your img count is {{ capturelinks }}</h1> 
+
             {% endif %}
         
         </body>
