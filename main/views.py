@@ -1,86 +1,3 @@
-'''
-from django.shortcuts import render,HttpResponse,redirect
-from django.http.response import StreamingHttpResponse
-from main.camera import VideoCamera, IPWebCam, MaskDetect, LiveWebCam
-
-# Create your view def createDataset(self):
-        
-        self.feched_link = Userinfo.objects.values_list('link').first()
-        self.realdata = str(self.feched_link)[2:-3]
-        print(self.realdata)
-        dlink = self.realdata
-        self.vs = VideoCapture(dlink).start()
-         def createDataset(self):
-        
-        self.feched_link = Userinfo.objects.values_list('link').first()
-        self.realdata = str(self.feched_link)[2:-3]
-        print(self.realdata)
-        dlink = self.realdata
-        self.vs = VideoCapture(dlink).start()
-        s here.
-
-#main file rendering
-
-def gen(camera):
-	while True:
-		frame = camera.get_frame()
-		yield (b'--frame\r\n'
-				b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
-
-
-def video_feed(request):
-
-	return StreamingHttpResponse(gen(VideoCamera()),
-					content_type='multipart/x-mixed-replace; boundary=frame')
-
-def livecam_feed(request):
-	return StreamingHttpResponse(gen(main()),
-					content_type='multipart/x-mixed-replace; boundary=frame')			
-
-def webcam_feed(request):
-	return StreamingHttpResponse(gen(IPWebCam()),
-					content_type='multipart/x-mixed-replace; boundary=frame')
-
-
-def mask_feed(request):
-	return StreamingHttpResponse(gen(MaskDetect()),
-					content_type='multipart/x-mixed-replace; boundary=frame')
-				
-
-def webcam_feed(request):
-	return StreamingHttpResponse(gen(CentroidTracker()),
-					content_type='multipart/x-mixed-replace; boundary=frame')
-
-def video_feed(request):
-	return StreamingHttpResponse(gen(VideoCamera()),
-					content_type='multipart/x-mixed-replace; boundary=frame')
-
-def video_feedd(request):
-	return StreamingHttpResponse(gen(VideoCamera()),
-					content_type='multipart/x-mixed-replace; boundary=frame')
-
-
-def webcam_feed(request):
-	return StreamingHttpResponse(gen(CentroidTracker()),
-					content_type='multipart/x-mixed-replace; boundary=frame')
-
-
-def mask_feed(request):
-	return StreamingHttpResponse(gen(main()),
-					content_type='multipart/x-mixed-replace; boundary=frame')
-					
-def livecam_feed(request):
-	return StreamingHttpResponse(gen(LiveWebCam()),
-					content_type='multipart/x-mixed-replace; boundary=frame')				
-
-
-
-def index(request):
-	return render(request,'home.html')
-
-def login(request):
-	return render(request,'login.html')
-	'''
 from fileinput import filename
 from django.shortcuts import render
 from django.http.response import StreamingHttpResponse
@@ -94,16 +11,6 @@ import os
 from cv2 import VideoCapture
 from PIL import Image
 # Create your views here.
-
-'''
-def index(request):
-	return render(request, 'main/home.html')
-'''
-# def new_page(request):
-# 	data = request.GET['fulltextarea']
-# 	l = data
-# 	return render(request, 'newpage.html', {'data':data})
-
 
 def pageInput(request):
     submitbutton = request.POST.get("submit")
@@ -162,7 +69,7 @@ def datasetin(request):
             _, frame = vs.read()
             im = Image.fromarray(frame, 'RGB')
             im = im.resize((224, 224))
-            im.save(os.path.join(directory, str(filename) + ".jpg"), "JPEG")
+            im.save(os.path.join('dataset/'+directory, str(filename) + ".jpg"), "JPEG")
 
             cv2.imshow("Capturing", frame)
             key = cv2.waitKey(1)
