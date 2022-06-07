@@ -1,0 +1,22 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>User Information Form</title>
+    </head>
+        <body>
+
+            
+
+            <form action="" method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="Submit" name="submit" value="Submit"/>
+            </form>
+            
+            {% if submitbutton == "Submit" %} 
+            <h1> Your folder name is {{ folder_name }}</h1>
+            <h1> Your img count is {{ img_count }}</h1>
+            {% endif %}
+        
+        </body>
+</html>

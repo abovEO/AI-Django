@@ -16,6 +16,7 @@ urlpatterns = [
     path('mask_feed', views.mask_feed, name='mask_feed'),
 
     path('pageInput/', views.pageInput, name="pageInput"),
+    path('captureinput/', views.datasetin, name="capturedata")
 
     
 ]

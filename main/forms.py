@@ -8,3 +8,8 @@ class UserForm(forms.Form):
     links= forms.CharField(max_length=1000)
     
 
+class CaptureIn(forms.Form):
+    folder_name= forms.CharField(max_length=100)
+    img_count= forms.IntegerField()
+    
+
