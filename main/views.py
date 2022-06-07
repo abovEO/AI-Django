@@ -6,7 +6,7 @@ from main.camera import MaskDetect
 from django.shortcuts import render
 from .forms import UserForm, CaptureIn
 import cv2
-from .models import Userinfo
+from .models import Userinfo ,datacaptb
 import os
 from cv2 import VideoCapture
 from PIL import Image
@@ -40,22 +40,26 @@ def datasetin(request):
 
     folder = ''
     img = ''
-    # emailvalue=''
+    caplink = ''
+ 
 
     form = CaptureIn(request.POST or None)
     if form.is_valid():
         folder = form.cleaned_data.get("folder_name")
         img = form.cleaned_data.get("img_count")
+        caplink = form.cleaned_data.get("caplink")
         # emailvalue= form.cleaned_data.get("email")
+        reg = datacaptb(fname=folder, imgcount=img,clink = caplink)
+        reg.save()
         directory = folder
         imagecount = img
-        feched_link = Userinfo.objects.values_list('link').first()
+        feched_link = datacaptb.objects.values_list('clink').first()
         realdata = str(feched_link)[2:-3]
         print(realdata)
         linkk = realdata
         
         if directory != 'quite':
-            os.mkdir('dataset/'+directory)
+            os.mkdir(os.path.join('dataset/')+directory)
         os.makedirs(directory,exist_ok=True)
         
         vs = cv2.VideoCapture(linkk)
@@ -69,7 +73,7 @@ def datasetin(request):
             _, frame = vs.read()
             im = Image.fromarray(frame, 'RGB')
             im = im.resize((224, 224))
-            im.save(os.path.join('dataset/'+directory, str(filename) + ".jpg"), "JPEG")
+            im.save(os.path.join(directory, str(filename) + ".jpg"), "JPEG")
 
             cv2.imshow("Capturing", frame)
             key = cv2.waitKey(1)
@@ -81,10 +85,11 @@ def datasetin(request):
       
 
 
-    context = {'form': form, 'folder_name': folder, 'img_count': img,
+    context = {'form': form, 'folder_name': folder, 'img_count': img,'clink':caplink,
                'submitbutton': submitbutton}
 
     return render(request, 'capturein.html', context)
+
 
 
 def gen(camera):

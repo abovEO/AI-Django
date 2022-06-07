@@ -11,5 +11,4 @@ class UserForm(forms.Form):
 class CaptureIn(forms.Form):
     folder_name= forms.CharField(max_length=100)
     img_count= forms.IntegerField()
-    
-
+    caplink = forms.CharField(max_length=2000)
