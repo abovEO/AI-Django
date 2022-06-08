@@ -1,7 +1,7 @@
 from fileinput import filename
 from django.shortcuts import render
 from django.http.response import StreamingHttpResponse
-from main.camera import MaskDetect, VideoCamera
+from main.camera import MaskDetect, LiveWebCam
 from django.shortcuts import render
 from .forms import UserForm, CaptureIn
 import cv2
@@ -74,10 +74,12 @@ def datasetin(request):
         while True and count < imagecount:
             filename += 1
             count += 1
-            _, frame = vs.read()
-            im = Image.fromarray(frame, 'RGB')
-            im = im.resize((224, 224))
-            im.save(os.path.join('dataset/'+directory, str(filename) + ".jpg"), "JPEG")
+            ret, frame = vs.read()
+            # im = Image.fromarray(frame, 'RGB')
+            # im = im.resize((224, 224))
+            if ret == False:
+                break
+            cv2.imwrite(os.path.join('dataset/'+directory, str(filename) + ".jpg"), frame)
 
            
         
@@ -101,8 +103,9 @@ def gen(camera):
 def mask_feed(request):
     return StreamingHttpResponse(gen(MaskDetect()),
                                  content_type='multipart/x-mixed-replace; boundary=frame')
-def video_feed(request):
-	return StreamingHttpResponse(gen(VideoCamera()),
+
+def livecam_feed(request):
+	return StreamingHttpResponse(gen(LiveWebCam()),
 					content_type='multipart/x-mixed-replace; boundary=frame')
 
 
@@ -133,3 +136,6 @@ def cameramanagement(request):
 
 def map(request):
     return render(request, 'map.html')
+
+def videoss(request):
+    return render(request, 'videoss.html')

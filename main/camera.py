@@ -134,20 +134,17 @@ class MaskDetect(object):
         return jpeg.tobytes()
 
 
-class VideoCamera(object):
+class LiveWebCam(object):
+
     def __init__(self):
-        self.feched_link = Userinfo.objects.values_list('link').first()
-        self.realdata = str(self.feched_link)[2:-3]
-        print(self.realdata)
-        linkk = self.realdata
-        self.vs = VideoStream(linkk).start()
+        self.cap = cv2.VideoCapture("rtmp://media5.ambicam.com:1938/live/81f911d4-84b2-43a9-98bd-bdba4dc4538f")
+
 
     def __del__(self):
-        cv2.destroyAllWindows()
-
+        self.cap.release()
+        
     def get_frame(self):
-        imgNp = self.vs.read()
-        resize = cv2.resize(imgNp, (640, 480),
-                                interpolation=cv2.INTER_LINEAR)
-        ret, jpeg = cv2.imencode('.jpg', resize)
-        return jpeg.tobytes()
+        ret, frame = self.cap.read()
+        frame_flip = cv2.flip(frame, 1)
+        ret, frame = cv2.imencode('.jpg', frame_flip)
+        return frame.tobytes()
